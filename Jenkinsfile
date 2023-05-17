@@ -53,7 +53,7 @@ pipeline{
         }
        stage("updating java lb url into reactjs app"){
             steps{
-                sh ''''
+                sh '''
                   url=`kubectl get svc |grep java-springboot-svc |cut -d " " -f10`
                   cd react-frontend/src/services
                   sed s/backendurl/$url/g EmployeeService.js >test.js
