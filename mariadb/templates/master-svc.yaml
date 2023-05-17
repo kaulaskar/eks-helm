@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "mariadb.fullname" . }}
+  name: devops-mariadb
   namespace: database
   labels:
     app: "{{ template "mariadb.name" . }}"
