@@ -29,7 +29,7 @@ pipeline{
             steps{
                 sh ''' helm upgrade --install devops-mariadb mariadb --values mariadb/createat-mariadb.yaml
                        sleep 30s
-                       helm status devops-mariadb mariadb
+                       helm status devops-mariadb
                 '''
             }
         }
@@ -47,7 +47,7 @@ pipeline{
                 sh ''' 
                    helm upgrade --install devops-spring springboot --values springboot/create-task-java.yaml
                    sleep 30s
-                   helm status devops-mariadb devops-spring
+                   helm status devops-spring
                 '''
             }
         }
