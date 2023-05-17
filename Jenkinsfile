@@ -51,13 +51,40 @@ pipeline{
                 '''
             }
         }
-        /*stage("terraform apply"){
+       stage("updating java lb url into reactjs app"){
             steps{
-                sh ''' kubectl apply -f react-deploy.yaml
-                       sleep 10s
-                       kubectl apply -f react-svc.yaml
+                sh ''''
+                  url=`kubectl get svc |grep java-springboot-svc |cut -d " " -f10`
+                  cd react-frontend/src/services
+                  sed s/backendurl/$url/g EmployeeService.js >test.js
+                  count=`grep backendurl test.js`
+                  if [ $count == 0 ]
+                  then
+                     mv test.js EmployeeService.js
+                  else
+                    echo "java backend url not update"
+                    exit 1
+                  fi
                 '''
             }
-        }*/
+        }
+        stage("reacjs docker build "){
+            steps{
+                sh ''' cd react-frontend/frontend
+                       docker build -t malleshdevops/createat-devops-task:react-v11
+                       docker push malleshdevops/createat-devops-task:react-v11
+                '''
+            }
+        }
+        stage("deploy reacjs application with helm"){
+            steps{
+              sh ''' 
+                   cd react-frontend
+                   helm upgrade --install devops-reactjs frontend --values frontend/frontend-values-prod.yaml
+                   sleep 30s
+                   helm status devops-reactjs
+                '''
+            }
+        }
     }
 }
