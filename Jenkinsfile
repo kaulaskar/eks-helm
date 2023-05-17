@@ -70,7 +70,7 @@ pipeline{
         }
         stage("reacjs docker build "){
             steps{
-                sh ''' cd react-frontend/frontend
+                sh ''' cd react-frontend
                        docker build -t malleshdevops/createat-devops-task:react-v11 .
                        docker push malleshdevops/createat-devops-task:react-v11
                 '''
