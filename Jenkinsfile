@@ -57,7 +57,7 @@ pipeline{
                   url=`kubectl get svc |grep java-springboot-svc |cut -d " " -f10`
                   cd react-frontend/src/services
                   sed s/backendurl/$url/g EmployeeService.js >test.js
-                  count=`grep backendurl test.js`
+                  count=`grep 'backendurl' test.js`
                   if [ "$count" == "0" ]
                   then
                      mv test.js EmployeeService.js
