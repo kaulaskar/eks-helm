@@ -3,8 +3,8 @@ pipeline {
       stages {
          stage ('Build') {
           steps {
-             sh 'cd $WORKSPACE/springboot/java-springboot/'
-             sh 'docker build -t devops:${BUILD_NUMBER} .'
+             sh '''cd $WORKSPACE/springboot/java-springboot/
+                   docker build -t devops:${BUILD_NUMBER} .'''
              }
            }
            stage('push ECR'){
