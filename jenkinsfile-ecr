@@ -10,8 +10,15 @@ pipeline {
            stage('push ECR'){
             steps {
                 sh 'aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 950390872171.dkr.ecr.us-west-2.amazonaws.com'
-                sh 'docker tag devops:${BUILD_NUMBER} 950390872171.dkr.ecr.us-west-2.amazonaws.com/devops:${BUILD_NUMBER}'
-                sh 'docker push 950390872171.dkr.ecr.us-west-2.amazonaws.com/devops:${BUILD_NUMBER}'
+                ECR_IMAGE_ID=$(aws ecr describe-images --repository-name devops --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageDigest' --output text)
+                LOCAL_IMAGE_ID=$(docker inspect devops:${BUILD_NUMBER} --format='{{.Id}}')
+		    if [ "$ECR_IMAGE_ID" = "$LOCAL_IMAGE_ID" ]; then
+			  echo "The ECR image ID ($ECR_IMAGE_ID) matches the local image ID ($LOCAL_IMAGE_ID)."
+		    else
+			  echo "The ECR image ID ($ECR_IMAGE_ID) does not match the local image ID ($LOCAL_IMAGE_ID). pushing latest image to ECR repository"
+			  sh 'docker tag devops:${BUILD_NUMBER}		950390872171.dkr.ecr.us-west-2.amazonaws.com/devops:${BUILD_NUMBER}'
+                    sh 'docker push 950390872171.dkr.ecr.us-west-2.amazonaws.com/devops:reactjs-${BUILD_NUMBER}'
+		   fi
             }
           }
           }
