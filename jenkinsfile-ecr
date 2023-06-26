@@ -12,6 +12,7 @@ pipeline {
                 sh '''aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 950390872171.dkr.ecr.us-west-2.amazonaws.com
                 ##ECR_IMAGE_ID=$(aws ecr describe-images --repository-name devops --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageDigest' --output text)
                 latest_tag=$(aws ecr describe-images --repository-name devops --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
+                echo $latest_tag
                ECR_IMAGE_ID=$(aws ecr describe-images --repository-name devops --image-ids imageTag="$latest_tag" --query 'imageDetails[0].imageDigest' --output text)
                 LOCAL_IMAGE_ID=$(docker inspect devops:${BUILD_NUMBER} --format='{{.Id}}')
 		    if [ "$ECR_IMAGE_ID" = "$LOCAL_IMAGE_ID" ]; then
