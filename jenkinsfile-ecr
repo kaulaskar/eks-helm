@@ -18,8 +18,8 @@ pipeline {
 			  echo "The ECR image ID ($ECR_IMAGE_ID) matches the local image ID ($LOCAL_IMAGE_ID)."
 		    else
 			  echo "The ECR image ID ($ECR_IMAGE_ID) does not match the local image ID ($LOCAL_IMAGE_ID). pushing latest image to ECR repository"
-			  sh docker tag devops:${BUILD_NUMBER}	950390872171.dkr.ecr.us-west-2.amazonaws.com/devops:${BUILD_NUMBER}
-                    	 sh docker push 950390872171.dkr.ecr.us-west-2.amazonaws.com/devops:reactjs-${BUILD_NUMBER}
+			  docker tag devops:${BUILD_NUMBER}	950390872171.dkr.ecr.us-west-2.amazonaws.com/devops:${BUILD_NUMBER}
+                    	 docker push 950390872171.dkr.ecr.us-west-2.amazonaws.com/devops:reactjs-${BUILD_NUMBER}
 		   fi'''
             }
           }
